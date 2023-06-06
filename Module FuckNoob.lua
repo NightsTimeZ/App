@@ -6,17 +6,6 @@ if not getgenv or not sethiddenprop or not setsimulationrad then return false en
 if NETWORKOWNER then NETWORKOWNER:Disconnect() NETWORKPLAYERCHECK:Disconnect() NETWORKPLAYERCHECK2:Disconnect() end
 getgenv().NETWORK_RADIUS = NETWORK_RADIUS or math.huge
 
-if not isfile("network-ownership.log") then
-    writefile("network-ownership.log", "Script executed on game "..game.PlaceId.."!\n")
-else
-    appendfile("network-ownership.log", "Script executed on game "..game.PlaceId.."!\n")
-end
-
-if not game:IsLoaded() then
-    appendfile("network-ownership.log", "Waiting for game to load...\n")
-    game.Loaded:Wait() -- Wait for game
-end
-
 -- Grab services
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -32,13 +21,6 @@ end
 
 getgenv().NETWORKPLAYERCHECK = Players.PlayerAdded:Connect(function(Plr)
     PlayerList[Plr] = true
-end)
-
-getgenv().NETWORKPLAYERCHECK2 = Players.PlayerRemoving:Connect(function(Plr)
-    local Success, Err = pcall(function() PlayerList[Plr] = nil end)
-    if not Success then
-        appendfile("network-ownership.log", "Error while de-registering player that left: "..tostring(Err).."\n")
-    end
 end)
 
 -- Configure network services
